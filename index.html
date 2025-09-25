@@ -307,7 +307,69 @@
   </style>
 
 </head>
+<script>
+  function adicionarPrato() {
+    const categoria = document.getElementById("categoria").value;
+    const nome = document.getElementById("nomePrato").value;
+    const descricao = document.getElementById("descricaoPrato").value;
+    const preco = parseFloat(document.getElementById("precoPrato").value).toFixed(2);
+    const imagem = document.getElementById("imagemPrato").value;
 
+    if (!nome || !descricao || !preco || !imagem) {
+      alert("Preencha todos os campos!");
+      return;
+    }
+
+    // Criar elementos
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const img = document.createElement("img");
+    img.src = imagem;
+    img.alt = descricao;
+
+    const h3 = document.createElement("h3");
+    h3.textContent = nome;
+
+    const pDesc = document.createElement("p");
+    pDesc.textContent = descricao;
+
+    const pPreco = document.createElement("p");
+    pPreco.className = "preco";
+    pPreco.textContent = `R$ ${preco}`;
+
+    const btnRemover = document.createElement("button");
+    btnRemover.textContent = "🗑 Remover";
+    btnRemover.style.marginTop = "10px";
+    btnRemover.onclick = () => card.remove();
+
+    const btnEditar = document.createElement("button");
+    btnEditar.textContent = "✏️ Editar";
+    btnEditar.style.marginTop = "10px";
+    btnEditar.style.marginRight = "5px";
+    btnEditar.onclick = () => {
+      const novoDesc = prompt("Editar descrição:", pDesc.textContent);
+      if (novoDesc !== null) {
+        pDesc.textContent = novoDesc;
+      }
+    };
+
+    // Montar card
+    card.appendChild(img);
+    card.appendChild(h3);
+    card.appendChild(pDesc);
+    card.appendChild(pPreco);
+    card.appendChild(btnEditar);
+    card.appendChild(btnRemover);
+
+    // Inserir na categoria correta
+    const container = document.querySelector(`#${categoria} + .menu-section`);
+    container.appendChild(card);
+
+    // Limpar formulário
+    document.getElementById("form-cardapio").reset();
+  }
+</script>
 <body>
 
 
@@ -341,7 +403,31 @@
   </nav>
 
 
+<!-- GERENCIAR CARDÁPIO -->
+<h2 id="gerenciar">Gerenciar Cardápio</h2>
 
+<form id="form-cardapio">
+  <label for="categoria">Categoria:</label>
+  <select id="categoria" required>
+    <option value="entradas">Entradas</option>
+    <option value="pratos">Pratos Principais</option>
+    <option value="bebidas">Bebidas</option>
+  </select>
+
+  <label for="nomePrato">Nome do Prato:</label>
+  <input type="text" id="nomePrato" required>
+
+  <label for="descricaoPrato">Descrição / Ingredientes:</label>
+  <input type="text" id="descricaoPrato" required>
+
+  <label for="precoPrato">Preço (ex: 25.00):</label>
+  <input type="number" id="precoPrato" step="0.01" required>
+
+  <label for="imagemPrato">URL da Imagem:</label>
+  <input type="url" id="imagemPrato" required>
+
+  <button type="button" onclick="adicionarPrato()">Adicionar Prato</button>
+</form>
   <!-- MAIN -->
 
   <main>
@@ -554,5 +640,6 @@
 
 
 </body>
+
 
 </html>
